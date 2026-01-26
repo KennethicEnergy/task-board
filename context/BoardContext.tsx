@@ -340,17 +340,11 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const changeTaskPriority = useCallback(
     async (taskId: string, priorityId: string) => {
-      if (!user) {
-        console.warn('[BoardContext] changeTaskPriority: No user');
-        return;
-      }
+      if (!user) return;
 
       try {
         const task = tasks.find((t) => t.id === taskId);
-        if (!task) {
-          console.warn('[BoardContext] changeTaskPriority: Task not found', taskId);
-          return;
-        }
+        if (!task) return;
 
         // Don't update if priority is already the same
         if (task.priorityId === priorityId) {
@@ -368,7 +362,6 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           newValue: priorityId,
         });
       } catch (err) {
-        console.error('[BoardContext] changeTaskPriority error:', err);
         setError(err instanceof Error ? err.message : 'Failed to change task priority');
       }
     },

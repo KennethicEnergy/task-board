@@ -2,6 +2,9 @@
 
 A comprehensive task management board application built with Next.js, TypeScript, and Firebase. This application demonstrates professional frontend development practices including custom drag-and-drop functionality, real-time data synchronization, draft auto-saving, expiry notifications, and comprehensive update history tracking.
 
+**🔗 Live Demo**: [https://task-board-silk.vercel.app/](https://task-board-silk.vercel.app/)  
+**📦 Repository**: [https://github.com/KennethicEnergy/task-board](https://github.com/KennethicEnergy/task-board)
+
 ## Features
 
 ### Core Functionality
@@ -80,8 +83,8 @@ techlint-exam/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd techlint-exam
+   git clone https://github.com/KennethicEnergy/task-board.git
+   cd task-board
    ```
 
 2. **Install dependencies**

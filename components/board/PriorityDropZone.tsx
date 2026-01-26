@@ -82,11 +82,7 @@ export const PriorityDropZone = ({ priority }: PriorityDropZoneProps) => {
           const isTask = dragType === 'task' || !dragType;
           if (isTask) {
             changeTaskPriority(taskId.trim(), priority.id);
-          } else {
-            console.warn('[PriorityDropZone] Not a task, skipping:', { dragType });
           }
-        } else {
-          console.warn('[PriorityDropZone] No valid task ID found:', { taskId });
         }
       }}
     >
