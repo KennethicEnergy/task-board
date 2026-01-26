@@ -160,9 +160,46 @@ Generate coverage report:
 npm run test:coverage
 ```
 
-## Docker Deployment
+## Deployment
 
-### Build and Run with Docker
+### Vercel Deployment
+
+1. **Push your code to GitHub/GitLab**
+   ```bash
+   git push origin main
+   ```
+
+2. **Import project to Vercel**
+   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
+   - Click "Add New Project"
+   - Import your repository
+
+3. **Configure Environment Variables**
+   In Vercel project settings, go to **Settings → Environment Variables** and add all Firebase configuration variables:
+   
+   ```
+   NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789
+   NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX (optional)
+   ```
+   
+   **Important**: 
+   - Make sure to add these for **Production**, **Preview**, and **Development** environments
+   - After adding variables, you need to **redeploy** for changes to take effect
+
+4. **Deploy**
+   - Click "Deploy" or push a new commit to trigger automatic deployment
+   - Wait for the build to complete
+
+5. **Verify Deployment**
+   - Once deployed, test account creation/login to ensure Firebase is configured correctly
+   - Check Vercel logs if you encounter any errors
+
+### Docker Deployment
 
 1. **Build the Docker image**
    ```bash
