@@ -62,7 +62,7 @@ export const HistoryModal = ({ history, onClose }: HistoryModalProps) => {
                     </div>
                     {entry.previousValue && entry.newValue && (
                       <div className="text-xs text-gray-600 mt-1">
-                        Changed from "{entry.previousValue}" to "{entry.newValue}"
+                        Changed from &ldquo;{entry.previousValue}&rdquo; to &ldquo;{entry.newValue}&rdquo;
                       </div>
                     )}
                     {entry.action === 'task_updated' && entry.metadata && (() => {
@@ -87,7 +87,7 @@ export const HistoryModal = ({ history, onClose }: HistoryModalProps) => {
                           )}
                           {previousTitle && newTitle && previousTitle !== newTitle && (
                             <div>
-                              <span className="font-medium">Title:</span> "{previousTitle}" → "{newTitle}"
+                              <span className="font-medium">Title:</span> &ldquo;{previousTitle}&rdquo; → &ldquo;{newTitle}&rdquo;
                             </div>
                           )}
                           {previousCategoryId && newCategoryId && previousCategoryId !== newCategoryId && (
