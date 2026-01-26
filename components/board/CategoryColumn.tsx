@@ -22,7 +22,7 @@ export const CategoryColumn = ({
   const { moveTask, deleteCategory } = useBoard();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
-  const { handleDragStart, handleDragOver, handleDrop, handleDragEnd, draggedOver } =
+  const { handleDragStart, handleDragOver, handleDragEnd, draggedOver } =
     useDragAndDrop({
       onTaskDrop: (taskId, categoryId, order) => {
         moveTask(taskId, categoryId, order);
@@ -197,7 +197,7 @@ export const CategoryColumn = ({
           }
         }}
       >
-        {categoryTasks.map((task, index) => {
+        {categoryTasks.map((task) => {
           const priority = priorities.find((p) => p.id === task.priorityId);
           return (
             <TaskCard

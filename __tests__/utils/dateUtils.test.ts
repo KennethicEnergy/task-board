@@ -1,7 +1,6 @@
 import {
   formatDate,
   formatDateTime,
-  formatRelativeTime,
   isExpired,
   isExpiringSoon,
   createExpiryDate,
@@ -50,15 +49,10 @@ describe('dateUtils', () => {
 
   describe('isExpiringSoon', () => {
     it('should return true when date is within threshold', () => {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      tomorrow.setHours(12, 0, 0, 0);
       const now = new Date();
-      now.setHours(12, 0, 0, 0);
-      const hoursDiff = (tomorrow.getTime() - now.getTime()) / (1000 * 60 * 60);
-      if (hoursDiff <= 24) {
-        expect(isExpiringSoon(tomorrow, 1, 0)).toBe(true);
-      }
+      // Set tomorrow to be 23 hours from now (within 1 day threshold)
+      const tomorrow = new Date(now.getTime() + 23 * 60 * 60 * 1000);
+      expect(isExpiringSoon(tomorrow, 1, 0)).toBe(true);
     });
 
     it('should return false when date is beyond threshold', () => {

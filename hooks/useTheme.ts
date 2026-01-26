@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -12,17 +12,39 @@ const applyTheme = (newTheme: Theme) => {
 };
 
 export const useTheme = () => {
-  const [theme, setTheme] = useState<Theme>('light');
+  // Initialize theme from localStorage if available
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme') as Theme | null;
+      return savedTheme || 'light';
+    }
+    return 'light';
+  });
+  const mountedRef = useRef(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    // Get theme from localStorage or default to light
-    const savedTheme = localStorage.getItem('theme') as Theme | null;
-    const initialTheme = savedTheme || 'light';
-    setTheme(initialTheme);
-    applyTheme(initialTheme);
-  }, []);
+    // Apply theme on mount
+    if (!mountedRef.current && typeof window !== 'undefined') {
+      mountedRef.current = true;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMounted(true);
+      const savedTheme = localStorage.getItem('theme') as Theme | null;
+      const initialTheme = savedTheme || 'light';
+      if (initialTheme !== theme) {
+        setTheme(initialTheme);
+      } else {
+        applyTheme(theme);
+      }
+    }
+  }, [theme]);
+
+  useEffect(() => {
+    if (mounted && typeof window !== 'undefined') {
+      localStorage.setItem('theme', theme);
+      applyTheme(theme);
+    }
+  }, [theme, mounted]);
 
   const toggleTheme = () => {
     setTheme((currentTheme) => {

@@ -3,13 +3,9 @@ import {
   getDoc,
   setDoc,
   updateDoc,
-  collection,
-  query,
-  where,
-  getDocs,
 } from 'firebase/firestore';
 import { db } from './config';
-import { User, NotificationSettings } from '@/types';
+import { User } from '@/types';
 
 const USERS_COLLECTION = 'users';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Category, Task } from '@/types';
+import { Task } from '@/types';
 import { CategoryColumn } from './CategoryColumn';
 import { PriorityDropZone } from './PriorityDropZone';
 import { useBoard } from '@/context/BoardContext';
@@ -38,15 +38,6 @@ export const Board = () => {
         reorderCategories(newOrder.map((c) => c.id));
       },
     });
-
-  const handleCreateTask = (categoryId: string) => {
-    const category = categories.find((c) => c.id === categoryId);
-    if (!category) {
-      toast.error('Category not found');
-      return;
-    }
-    setShowTaskModal(true);
-  };
 
   const handleEditTask = (task: Task) => {
     setEditingTask(task);

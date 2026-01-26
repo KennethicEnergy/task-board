@@ -58,6 +58,8 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     if (!user) {
+      // Reset state when user logs out - necessary for cleanup
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCategories([]);
       setTasks([]);
       setPriorities(defaultPriorities);

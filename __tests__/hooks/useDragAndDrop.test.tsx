@@ -3,7 +3,6 @@ import { useDragAndDrop } from '@/hooks/useDragAndDrop';
 
 describe('useDragAndDrop', () => {
   const mockOnTaskDrop = jest.fn();
-  const mockOnCategoryDrop = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();

@@ -1,4 +1,4 @@
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import { BoardProvider, useBoard } from '@/context/BoardContext';
 import { AuthProvider } from '@/context/AuthContext';
 import { ReactNode } from 'react';
