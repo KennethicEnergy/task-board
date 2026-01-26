@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, FormEvent, useMemo } from 'react';
 import { Task, Category, Priority, TaskDraft } from '@/types';
 import { useBoard } from '@/context/BoardContext';
 import { useDraftSaving } from '@/hooks/useDraftSaving';
@@ -26,19 +26,33 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
 
   useEffect(() => {
     if (task) {
-      setTitle(task.title);
-      setDescription(task.description);
+      // If task has a draft, restore draft values; otherwise use task values
+      if (task.draft) {
+        setTitle(task.draft.title);
+        setDescription(task.draft.description);
+        setPriorityId(task.draft.priorityId || task.priorityId);
+        setExpiryDate(task.draft.expiryDate ? formatDate(task.draft.expiryDate) : '');
+      } else {
+        setTitle(task.title);
+        setDescription(task.description);
+        setPriorityId(task.priorityId);
+        setExpiryDate(task.expiryDate ? formatDate(task.expiryDate) : '');
+      }
+      // Always use task's category (can't change category via draft)
       setCategoryId(task.categoryId);
-      setPriorityId(task.priorityId);
-      setExpiryDate(task.expiryDate ? formatDate(task.expiryDate) : '');
       setDraft(task.draft);
     } else {
+      // Reset form for new task
+      setTitle('');
+      setDescription('');
+      setExpiryDate('');
       if (categories.length > 0) {
         setCategoryId(categories[0].id);
       }
       if (priorities.length > 0) {
         setPriorityId(priorities[0].id);
       }
+      setDraft(null);
     }
   }, [task, categories, priorities]);
 
@@ -47,25 +61,28 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
     setSaving(true);
     try {
       await updateTask(task.id, { draft: draftData });
+      toast.success('Draft saved', { duration: 2000, icon: '💾' });
     } catch (error) {
       console.error('Failed to save draft:', error);
+      toast.error('Failed to save draft');
     } finally {
       setSaving(false);
     }
   };
 
-  useDraftSaving(
-    draft
-      ? {
-          title,
-          description,
-          expiryDate: expiryDate ? new Date(expiryDate) : null,
-          priorityId: priorityId || null,
-        }
-      : null,
-    handleSaveDraft,
-    !!task
-  );
+  // Memoize the draft object so it only changes when form values actually change
+  // This prevents the useDraftSaving hook from resetting the debounce timer on every render
+  const currentDraft = useMemo<TaskDraft | null>(() => {
+    if (!task) return null;
+    return {
+      title,
+      description,
+      expiryDate: expiryDate ? new Date(expiryDate) : null,
+      priorityId: priorityId || null,
+    };
+  }, [task, title, description, expiryDate, priorityId]);
+
+  useDraftSaving(currentDraft, handleSaveDraft, !!task);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
