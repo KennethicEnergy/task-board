@@ -39,13 +39,13 @@ export const CategoryModal = ({ onClose, onCreate }: CategoryModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/40 dark:bg-black/60 flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Create Category</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Create Category</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl cursor-pointer"
+            className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 text-2xl cursor-pointer"
           >
             ×
           </button>
@@ -53,7 +53,7 @@ export const CategoryModal = ({ onClose, onCreate }: CategoryModalProps) => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="categoryTitle" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="categoryTitle" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Title <span className="text-red-500">*</span>
             </label>
             <input
@@ -62,13 +62,13 @@ export const CategoryModal = ({ onClose, onCreate }: CategoryModalProps) => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               placeholder="Category name"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Color
             </label>
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
@@ -79,8 +79,8 @@ export const CategoryModal = ({ onClose, onCreate }: CategoryModalProps) => {
                   onClick={() => setSelectedColor(color)}
                   className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg border-2 transition-all cursor-pointer ${
                     selectedColor === color
-                      ? 'border-gray-900 scale-110'
-                      : 'border-gray-200 hover:border-gray-400'
+                      ? 'border-gray-900 dark:border-gray-300 scale-110'
+                      : 'border-gray-200 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
                   }`}
                   style={{ backgroundColor: color }}
                 />
@@ -92,14 +92,14 @@ export const CategoryModal = ({ onClose, onCreate }: CategoryModalProps) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer w-full sm:w-auto"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer w-full sm:w-auto"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors w-full sm:w-auto"
+              className="px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors w-full sm:w-auto"
             >
               {loading ? 'Creating...' : 'Create'}
             </button>

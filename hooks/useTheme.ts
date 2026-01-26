@@ -27,16 +27,19 @@ export const useTheme = () => {
   const toggleTheme = () => {
     setTheme((currentTheme) => {
       const newTheme: Theme = currentTheme === 'light' ? 'dark' : 'light';
+      // Apply immediately to ensure instant feedback
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+      }
       return newTheme;
     });
   };
 
   useEffect(() => {
-    if (mounted) {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('theme', theme);
-        applyTheme(theme);
-      }
+    if (mounted && typeof window !== 'undefined') {
+      localStorage.setItem('theme', theme);
+      applyTheme(theme);
     }
   }, [theme, mounted]);
 
