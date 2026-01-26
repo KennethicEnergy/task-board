@@ -42,10 +42,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = useCallback(async (email: string, password: string) => {
     const authUser = await loginUser(email, password);
     setUser(authUser);
+    localStorage.setItem('theme', 'light');
   }, []);
 
   const logout = useCallback(async () => {
     await logoutUser();
+    localStorage.removeItem('theme');
     setUser(null);
   }, []);
 
