@@ -201,22 +201,66 @@ npm run test:coverage
 
 ### Docker Deployment
 
+### Prerequisites
+
+Create a `.env` file in the project root with your Firebase configuration (see `.env.example`):
+
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789
+NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+### Build and Run
+
 1. **Build the Docker image**
    ```bash
    docker build -t task-board .
    ```
+   
+   Or with build arguments directly:
+   ```bash
+   docker build \
+     --build-arg NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key \
+     --build-arg NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com \
+     --build-arg NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id \
+     --build-arg NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.appspot.com \
+     --build-arg NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789 \
+     --build-arg NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id \
+     -t task-board .
+   ```
 
-2. **Run with Docker Compose**
+2. **Run with Docker Compose** (recommended)
    ```bash
    docker-compose up -d
    ```
+   
+   Docker Compose will automatically read from your `.env` file.
 
-3. **Access the application**
+3. **Or run directly**
+   ```bash
+   docker run -p 3000:3000 \
+     -e NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key \
+     -e NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com \
+     -e NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id \
+     -e NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.appspot.com \
+     -e NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789 \
+     -e NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id \
+     task-board
+   ```
+
+4. **Access the application**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-### Environment Variables for Docker
+### Important Notes
 
-Create a `.env` file in the project root with your Firebase configuration (see `.env.example`).
+- **Build-time variables**: Firebase `NEXT_PUBLIC_*` variables are required at build time, so they must be passed as build arguments (`--build-arg`) when building the image.
+- **Runtime variables**: They're also needed at runtime, so they must be set as environment variables when running the container.
+- **Docker Compose**: Automatically handles both build args and runtime env vars from your `.env` file.
 
 ## Code Quality
 
