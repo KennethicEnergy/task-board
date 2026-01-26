@@ -21,6 +21,7 @@ export const CategoryColumn = ({
 }: CategoryColumnProps) => {
   const { moveTask, deleteCategory } = useBoard();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
   const { handleDragStart, handleDragOver, handleDrop, handleDragEnd, draggedOver } =
     useDragAndDrop({
       onTaskDrop: (taskId, categoryId, order) => {
@@ -49,6 +50,19 @@ export const CategoryColumn = ({
     console.log('[CategoryColumn] handleTaskDragStart: After calling handleDragStart, types:', Array.from(e.dataTransfer.types));
   };
 
+  const handleCategoryDragEnter = (e: React.DragEvent) => {
+    // Check if it's a task being dragged
+    const isTask = e.dataTransfer.types.includes('application/x-drag-type') ||
+                   e.dataTransfer.types.includes('application/x-drag-id') ||
+                   e.dataTransfer.types.includes('text/plain');
+
+    if (isTask) {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragOver(true);
+    }
+  };
+
   const handleCategoryDragOver = (e: React.DragEvent) => {
     // Check if it's a task being dragged (can only check types in dragover, not data)
     const isTask = e.dataTransfer.types.includes('application/x-drag-type') ||
@@ -59,10 +73,21 @@ export const CategoryColumn = ({
       e.preventDefault();
       e.stopPropagation();
       e.dataTransfer.dropEffect = 'move';
+      setIsDragOver(true);
       handleDragOver(e, category.id);
     } else {
       // If it's a category being dragged, let the parent handle it
       e.dataTransfer.dropEffect = 'none';
+    }
+  };
+
+  const handleCategoryDragLeave = (e: React.DragEvent) => {
+    // Only reset if we're actually leaving the category column
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+    if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+      setIsDragOver(false);
     }
   };
 
@@ -76,6 +101,7 @@ export const CategoryColumn = ({
     if (dragType === 'task' && taskId) {
       e.preventDefault();
       e.stopPropagation();
+      setIsDragOver(false);
 
       // Check if the task is already in this category
       const existingTask = categoryTasks.find(t => t.id === taskId);
@@ -92,10 +118,14 @@ export const CategoryColumn = ({
 
   return (
     <div
-      className={`flex-shrink-0 w-80 bg-gray-50 rounded-lg p-4 ${
-        draggedOver === category.id ? 'ring-2 ring-indigo-500' : ''
+      className={`flex-shrink-0 w-80 bg-gray-50 rounded-lg p-4 transition-all ${
+        isDragOver || draggedOver === category.id
+          ? 'ring-2 ring-indigo-500 bg-indigo-50 border-2 border-indigo-300'
+          : ''
       }`}
+      onDragEnter={handleCategoryDragEnter}
       onDragOver={handleCategoryDragOver}
+      onDragLeave={handleCategoryDragLeave}
       onDrop={handleCategoryDrop}
     >
       <div className="flex items-center justify-between mb-4">
@@ -147,6 +177,7 @@ export const CategoryColumn = ({
             e.preventDefault();
             e.stopPropagation();
             e.dataTransfer.dropEffect = 'move';
+            setIsDragOver(true);
           }
         }}
         onDrop={(e) => {
@@ -158,6 +189,7 @@ export const CategoryColumn = ({
           if (dragType === 'task' && taskId) {
             e.preventDefault();
             e.stopPropagation();
+            setIsDragOver(false);
             const existingTask = categoryTasks.find(t => t.id === taskId);
             if (!existingTask) {
               moveTask(taskId, category.id, categoryTasks.length);

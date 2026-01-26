@@ -209,15 +209,53 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const updateTask = useCallback(
     async (id: string, updates: Partial<Task>) => {
       try {
+        const existingTask = tasks.find((t) => t.id === id);
+        if (!existingTask) return;
+
         await updateTaskService(id, updates);
+
+        // Track expiry date changes
         if (updates.expiryDate !== undefined) {
           await recordHistory({
             type: 'card',
             action: 'expiry_changed',
             entityId: id,
             entityType: 'task',
-            previousValue: tasks.find((t) => t.id === id)?.expiryDate?.toISOString(),
+            previousValue: existingTask.expiryDate?.toISOString(),
             newValue: updates.expiryDate?.toISOString(),
+          });
+        }
+
+        // Track general task updates (title, description, category, priority)
+        const hasGeneralUpdates = 
+          (updates.title !== undefined && updates.title !== existingTask.title) ||
+          (updates.description !== undefined && updates.description !== existingTask.description) ||
+          (updates.categoryId !== undefined && updates.categoryId !== existingTask.categoryId);
+
+        if (hasGeneralUpdates) {
+          const changedFields: string[] = [];
+          if (updates.title !== undefined && updates.title !== existingTask.title) {
+            changedFields.push('title');
+          }
+          if (updates.description !== undefined && updates.description !== existingTask.description) {
+            changedFields.push('description');
+          }
+          if (updates.categoryId !== undefined && updates.categoryId !== existingTask.categoryId) {
+            changedFields.push('category');
+          }
+
+          await recordHistory({
+            type: 'card',
+            action: 'task_updated',
+            entityId: id,
+            entityType: 'task',
+            metadata: {
+              changedFields,
+              previousTitle: existingTask.title,
+              newTitle: updates.title ?? existingTask.title,
+              previousCategoryId: existingTask.categoryId,
+              newCategoryId: updates.categoryId ?? existingTask.categoryId,
+            },
           });
         }
       } catch (err) {
