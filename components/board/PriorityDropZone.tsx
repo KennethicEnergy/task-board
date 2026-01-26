@@ -16,8 +16,8 @@ export const PriorityDropZone = ({ priority }: PriorityDropZoneProps) => {
     <div
       className={`p-2 sm:p-3 rounded-lg border-2 border-dashed transition-colors cursor-pointer select-none relative z-10 touch-manipulation ${
         isOver
-          ? 'border-indigo-500 bg-indigo-50'
-          : 'border-gray-300 bg-gray-50 hover:border-gray-400'
+          ? 'border-indigo-500 dark:border-indigo-400 bg-indigo-50 dark:bg-indigo-900/30'
+          : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500'
       }`}
       onDragEnter={(e) => {
         // Check if it's a task being dragged
@@ -128,9 +128,9 @@ export const PriorityDropZone = ({ priority }: PriorityDropZoneProps) => {
           className="w-3 h-3 sm:w-4 sm:h-4 rounded flex-shrink-0"
           style={{ backgroundColor: priority.color }}
         />
-        <span className="text-xs sm:text-sm font-medium text-gray-700">{priority.label}</span>
+        <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">{priority.label}</span>
       </div>
-      <p className="text-xs text-gray-500 mt-1 hidden sm:block">Drop tasks here to change priority</p>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 hidden sm:block">Drop tasks here to change priority</p>
     </div>
   );
 };

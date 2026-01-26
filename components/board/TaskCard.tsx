@@ -33,7 +33,7 @@ export const TaskCard = ({ task, priority, onEdit, onDragStart, onDragEnd, isDra
   const getExpiryBadgeClass = () => {
     if (expiryStatus === 'expired') return 'bg-red-100 text-red-800 border-red-300';
     if (expiryStatus === 'expiring') return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-    return '';
+    return 'bg-green-100 text-green-800 border-green-300';
   };
 
   return (
@@ -53,8 +53,8 @@ export const TaskCard = ({ task, priority, onEdit, onDragStart, onDragEnd, isDra
         console.log('[TaskCard] onDragStart: After calling onDragStart, types:', Array.from(e.dataTransfer.types));
       }}
       onDragEnd={onDragEnd}
-      className={`bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4 cursor-move hover:shadow-md transition-shadow touch-manipulation ${
-        isDraggedOver ? 'ring-2 ring-indigo-500' : ''
+      className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 sm:p-4 cursor-move hover:shadow-md dark:hover:shadow-lg transition-shadow touch-manipulation ${
+        isDraggedOver ? 'ring-2 ring-indigo-500 dark:ring-indigo-400' : ''
       }`}
       onClick={(e) => {
         // Only edit if not dragging
@@ -64,7 +64,7 @@ export const TaskCard = ({ task, priority, onEdit, onDragStart, onDragEnd, isDra
       }}
     >
       <div className="flex items-start justify-between mb-2 gap-2">
-        <h3 className="font-semibold text-gray-900 text-xs sm:text-sm flex-1 break-words">{task.title}</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-white text-xs sm:text-sm flex-1 break-words">{task.title}</h3>
         {priority && (
           <span
             className="ml-1 sm:ml-2 px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs font-medium rounded flex-shrink-0"
@@ -76,7 +76,7 @@ export const TaskCard = ({ task, priority, onEdit, onDragStart, onDragEnd, isDra
       </div>
 
       {task.description && (
-        <p className="text-xs text-gray-600 mb-2 line-clamp-2">{task.description}</p>
+        <p className="text-xs text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">{task.description}</p>
       )}
 
       {task.expiryDate && (
@@ -88,7 +88,7 @@ export const TaskCard = ({ task, priority, onEdit, onDragStart, onDragEnd, isDra
       )}
 
       {task.draft && (
-        <div className="mt-2 text-xs text-blue-600 italic">Draft saved</div>
+        <div className="mt-2 text-xs text-blue-600 dark:text-blue-400 italic">Draft saved</div>
       )}
     </div>
   );

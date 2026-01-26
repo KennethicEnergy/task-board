@@ -61,20 +61,20 @@ export const Board = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-gray-600">Loading board...</div>
+        <div className="text-gray-600 dark:text-gray-400">Loading board...</div>
       </div>
     );
   }
 
   return (
-    <div className="h-full flex flex-col bg-gray-100">
-      <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
+    <div className="h-full flex flex-col bg-gray-100 dark:bg-gray-900">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Board</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Board</h2>
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <button
               onClick={() => setShowCategoryModal(true)}
-              className="px-3 sm:px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm cursor-pointer w-full sm:w-auto"
+              className="px-3 sm:px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors text-sm cursor-pointer w-full sm:w-auto"
             >
               + Add Category
             </button>
@@ -86,7 +86,7 @@ export const Board = () => {
                 }
                 setShowTaskModal(true);
               }}
-              className="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm cursor-pointer w-full sm:w-auto"
+              className="px-3 sm:px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition-colors text-sm cursor-pointer w-full sm:w-auto"
             >
               + Add Task
             </button>
@@ -96,7 +96,7 @@ export const Board = () => {
 
       <div className="flex-1 overflow-x-auto p-4 sm:p-6">
         <div className="mb-4" onDragOver={(e) => e.stopPropagation()}>
-          <h3 className="text-xs sm:text-sm font-medium text-gray-700 mb-2">Priority Drop Zones</h3>
+          <h3 className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Priority Drop Zones</h3>
           <div className="flex gap-2 flex-wrap">
             {priorities.map((priority) => (
               <PriorityDropZone key={priority.id} priority={priority} />
@@ -143,10 +143,10 @@ export const Board = () => {
           {categories.length === 0 && (
             <div className="flex items-center justify-center w-full h-full">
               <div className="text-center">
-                <p className="text-gray-600 mb-4">No categories yet</p>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">No categories yet</p>
                 <button
                   onClick={() => setShowCategoryModal(true)}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 cursor-pointer"
+                  className="px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 cursor-pointer"
                 >
                   Create Your First Category
                 </button>

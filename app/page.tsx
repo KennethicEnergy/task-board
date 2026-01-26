@@ -4,14 +4,16 @@ import { useAuth } from '@/context/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { Board } from '@/components/board/Board';
 import { Header } from '@/components/layout/Header';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function Home() {
   const { user, loading } = useAuth();
+  useTheme(); // Initialize theme
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-gray-600 dark:text-gray-400">Loading...</div>
       </div>
     );
   }

@@ -118,9 +118,9 @@ export const CategoryColumn = ({
 
   return (
     <div
-      className={`flex-shrink-0 w-full sm:w-72 md:w-80 bg-gray-50 rounded-lg p-3 sm:p-4 transition-all ${
+      className={`flex-shrink-0 w-full sm:w-72 md:w-80 bg-gray-50 dark:bg-gray-800 rounded-lg p-3 sm:p-4 transition-all ${
         isDragOver || draggedOver === category.id
-          ? 'ring-2 ring-indigo-500 bg-indigo-50 border-2 border-indigo-300'
+          ? 'ring-2 ring-indigo-500 dark:ring-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 border-2 border-indigo-300 dark:border-indigo-500'
           : ''
       }`}
       onDragEnter={handleCategoryDragEnter}
@@ -134,29 +134,29 @@ export const CategoryColumn = ({
             className="w-3 h-3 sm:w-4 sm:h-4 rounded flex-shrink-0"
             style={{ backgroundColor: category.color || '#6366f1' }}
           />
-          <h2 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{category.title}</h2>
-          <span className="text-xs sm:text-sm text-gray-500 flex-shrink-0">({categoryTasks.length})</span>
+          <h2 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base truncate">{category.title}</h2>
+          <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">({categoryTasks.length})</span>
         </div>
         <div className="relative">
           <button
             onClick={() => setShowDeleteConfirm(true)}
-            className="text-gray-400 hover:text-red-600 text-sm cursor-pointer"
+            className="text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 text-sm cursor-pointer"
           >
             ×
           </button>
           {showDeleteConfirm && (
-            <div className="absolute right-0 top-6 bg-white border border-gray-200 rounded shadow-lg p-2 z-10">
-              <p className="text-xs text-gray-700 mb-2">Delete category?</p>
+            <div className="absolute right-0 top-6 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded shadow-lg p-2 z-10">
+              <p className="text-xs text-gray-700 dark:text-gray-300 mb-2">Delete category?</p>
               <div className="flex gap-2">
                 <button
                   onClick={handleDelete}
-                  className="text-xs px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 cursor-pointer"
+                  className="text-xs px-2 py-1 bg-red-600 dark:bg-red-500 text-white rounded hover:bg-red-700 dark:hover:bg-red-600 cursor-pointer"
                 >
                   Delete
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="text-xs text-gray-900 px-2 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 cursor-pointer"
+                  className="text-xs text-gray-900 dark:text-gray-200 px-2 py-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-500 cursor-pointer"
                 >
                   Cancel
                 </button>
