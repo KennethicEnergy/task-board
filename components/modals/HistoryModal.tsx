@@ -23,10 +23,10 @@ const getActionLabel = (action: UpdateHistoryEntry['action']): string => {
 
 export const HistoryModal = ({ history, onClose }: HistoryModalProps) => {
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Update History</h2>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Update History</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 text-2xl cursor-pointer"
@@ -44,14 +44,14 @@ export const HistoryModal = ({ history, onClose }: HistoryModalProps) => {
                 key={entry.id}
                 className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-semibold text-gray-900">
+                <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-2 sm:gap-0">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <span className="text-xs sm:text-sm font-semibold text-gray-900">
                         {getActionLabel(entry.action)}
                       </span>
                       <span
-                        className={`text-xs px-2 py-1 rounded ${
+                        className={`text-xs px-2 py-1 rounded flex-shrink-0 ${
                           entry.type === 'board'
                             ? 'bg-blue-100 text-blue-800'
                             : 'bg-green-100 text-green-800'
@@ -104,7 +104,7 @@ export const HistoryModal = ({ history, onClose }: HistoryModalProps) => {
                       </div>
                     )}
                   </div>
-                  <div className="text-xs text-gray-500 ml-4">
+                  <div className="text-xs text-gray-500 sm:ml-4 flex-shrink-0">
                     {formatDateTime(entry.timestamp)}
                   </div>
                 </div>

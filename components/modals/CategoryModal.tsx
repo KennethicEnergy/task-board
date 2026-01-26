@@ -39,10 +39,10 @@ export const CategoryModal = ({ onClose, onCreate }: CategoryModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Create Category</h2>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Create Category</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 text-2xl cursor-pointer"
@@ -71,13 +71,13 @@ export const CategoryModal = ({ onClose, onCreate }: CategoryModalProps) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Color
             </label>
-            <div className="grid grid-cols-6 gap-2">
+            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
               {COLORS.map((color) => (
                 <button
                   key={color}
                   type="button"
                   onClick={() => setSelectedColor(color)}
-                  className={`w-10 h-10 rounded-lg border-2 transition-all cursor-pointer ${
+                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg border-2 transition-all cursor-pointer ${
                     selectedColor === color
                       ? 'border-gray-900 scale-110'
                       : 'border-gray-200 hover:border-gray-400'
@@ -88,18 +88,18 @@ export const CategoryModal = ({ onClose, onCreate }: CategoryModalProps) => {
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 pt-4">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+              className="px-4 py-2 border border-gray-300 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer w-full sm:w-auto"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors w-full sm:w-auto"
             >
               {loading ? 'Creating...' : 'Create'}
             </button>

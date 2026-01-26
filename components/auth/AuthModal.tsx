@@ -8,13 +8,13 @@ export const AuthModal = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl p-6 sm:p-8 w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
             {isLogin ? 'Welcome Back' : 'Create Account'}
           </h2>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             {isLogin
               ? 'Sign in to access your board'
               : 'Get started with your task board'}

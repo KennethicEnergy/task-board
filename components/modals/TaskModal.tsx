@@ -109,10 +109,10 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
             {task ? 'Edit Task' : 'Create Task'}
           </h2>
           <button
@@ -153,7 +153,7 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
                 Category <span className="text-red-500">*</span>
@@ -211,17 +211,17 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
             <div className="text-sm text-blue-600">Saving draft...</div>
           )}
 
-          <div className="flex justify-end gap-2 pt-4">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+              className="px-4 py-2 border border-gray-300 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer w-full sm:w-auto"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors cursor-pointer"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors cursor-pointer w-full sm:w-auto"
             >
               {task ? 'Update' : 'Create'}
             </button>
