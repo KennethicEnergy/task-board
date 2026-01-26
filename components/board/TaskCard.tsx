@@ -53,7 +53,7 @@ export const TaskCard = ({ task, priority, onEdit, onDragStart, onDragEnd, isDra
         console.log('[TaskCard] onDragStart: After calling onDragStart, types:', Array.from(e.dataTransfer.types));
       }}
       onDragEnd={onDragEnd}
-      className={`bg-white rounded-lg shadow-sm border border-gray-200 p-4 cursor-move hover:shadow-md transition-shadow ${
+      className={`bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4 cursor-move hover:shadow-md transition-shadow touch-manipulation ${
         isDraggedOver ? 'ring-2 ring-indigo-500' : ''
       }`}
       onClick={(e) => {
@@ -63,11 +63,11 @@ export const TaskCard = ({ task, priority, onEdit, onDragStart, onDragEnd, isDra
         }
       }}
     >
-      <div className="flex items-start justify-between mb-2">
-        <h3 className="font-semibold text-gray-900 text-sm flex-1">{task.title}</h3>
+      <div className="flex items-start justify-between mb-2 gap-2">
+        <h3 className="font-semibold text-gray-900 text-xs sm:text-sm flex-1 break-words">{task.title}</h3>
         {priority && (
           <span
-            className="ml-2 px-2 py-1 text-xs font-medium rounded"
+            className="ml-1 sm:ml-2 px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs font-medium rounded flex-shrink-0"
             style={{ backgroundColor: `${priority.color}20`, color: priority.color }}
           >
             {priority.label}

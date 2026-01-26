@@ -118,7 +118,7 @@ export const CategoryColumn = ({
 
   return (
     <div
-      className={`flex-shrink-0 w-80 bg-gray-50 rounded-lg p-4 transition-all ${
+      className={`flex-shrink-0 w-full sm:w-72 md:w-80 bg-gray-50 rounded-lg p-3 sm:p-4 transition-all ${
         isDragOver || draggedOver === category.id
           ? 'ring-2 ring-indigo-500 bg-indigo-50 border-2 border-indigo-300'
           : ''
@@ -128,14 +128,14 @@ export const CategoryColumn = ({
       onDragLeave={handleCategoryDragLeave}
       onDrop={handleCategoryDrop}
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
           <div
-            className="w-4 h-4 rounded"
+            className="w-3 h-3 sm:w-4 sm:h-4 rounded flex-shrink-0"
             style={{ backgroundColor: category.color || '#6366f1' }}
           />
-          <h2 className="font-semibold text-gray-900">{category.title}</h2>
-          <span className="text-sm text-gray-500">({categoryTasks.length})</span>
+          <h2 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{category.title}</h2>
+          <span className="text-xs sm:text-sm text-gray-500 flex-shrink-0">({categoryTasks.length})</span>
         </div>
         <div className="relative">
           <button
@@ -167,7 +167,7 @@ export const CategoryColumn = ({
       </div>
 
       <div
-        className="space-y-3 min-h-[100px]"
+        className="space-y-2 sm:space-y-3 min-h-[100px]"
         onDragOver={(e) => {
           // Allow dropping tasks in the empty space
           const isTask = e.dataTransfer.types.includes('application/x-drag-type') ||

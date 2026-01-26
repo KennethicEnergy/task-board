@@ -14,7 +14,7 @@ export const PriorityDropZone = ({ priority }: PriorityDropZoneProps) => {
 
   return (
     <div
-      className={`p-3 rounded-lg border-2 border-dashed transition-colors cursor-pointer select-none relative z-10 ${
+      className={`p-2 sm:p-3 rounded-lg border-2 border-dashed transition-colors cursor-pointer select-none relative z-10 touch-manipulation ${
         isOver
           ? 'border-indigo-500 bg-indigo-50'
           : 'border-gray-300 bg-gray-50 hover:border-gray-400'
@@ -123,14 +123,14 @@ export const PriorityDropZone = ({ priority }: PriorityDropZoneProps) => {
         }
       }}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 sm:gap-2">
         <div
-          className="w-4 h-4 rounded"
+          className="w-3 h-3 sm:w-4 sm:h-4 rounded flex-shrink-0"
           style={{ backgroundColor: priority.color }}
         />
-        <span className="text-sm font-medium text-gray-700">{priority.label}</span>
+        <span className="text-xs sm:text-sm font-medium text-gray-700">{priority.label}</span>
       </div>
-      <p className="text-xs text-gray-500 mt-1">Drop tasks here to change priority</p>
+      <p className="text-xs text-gray-500 mt-1 hidden sm:block">Drop tasks here to change priority</p>
     </div>
   );
 };
