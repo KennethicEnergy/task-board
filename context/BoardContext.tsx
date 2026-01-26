@@ -229,7 +229,7 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
 
         // Track general task updates (title, description, category, priority)
-        const hasGeneralUpdates = 
+        const hasGeneralUpdates =
           (updates.title !== undefined && updates.title !== existingTask.title) ||
           (updates.description !== undefined && updates.description !== existingTask.description) ||
           (updates.categoryId !== undefined && updates.categoryId !== existingTask.categoryId);
@@ -286,7 +286,7 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (!task) return;
 
         const oldCategoryId = task.categoryId;
-        
+
         // If moving within the same category, don't do anything
         if (oldCategoryId === categoryId) {
           return;
@@ -340,27 +340,13 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const changeTaskPriority = useCallback(
     async (taskId: string, priorityId: string) => {
-      console.log('[BoardContext] changeTaskPriority called:', {
-        taskId,
-        priorityId,
-        hasUser: !!user,
-        tasksCount: tasks.length,
-      });
-      
       if (!user) {
         console.warn('[BoardContext] changeTaskPriority: No user');
         return;
       }
-      
+
       try {
         const task = tasks.find((t) => t.id === taskId);
-        console.log('[BoardContext] changeTaskPriority: Task found:', {
-          taskFound: !!task,
-          taskTitle: task?.title,
-          currentPriorityId: task?.priorityId,
-          newPriorityId: priorityId,
-        });
-        
         if (!task) {
           console.warn('[BoardContext] changeTaskPriority: Task not found', taskId);
           return;
@@ -368,14 +354,11 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
         // Don't update if priority is already the same
         if (task.priorityId === priorityId) {
-          console.log('[BoardContext] changeTaskPriority: Priority already the same, skipping');
           return;
         }
 
-        console.log('[BoardContext] changeTaskPriority: Calling updateTaskService');
         await updateTaskService(taskId, { priorityId });
-        console.log('[BoardContext] changeTaskPriority: updateTaskService completed');
-        
+
         await recordHistory({
           type: 'card',
           action: 'priority_changed',
@@ -384,7 +367,6 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           previousValue: task.priorityId,
           newValue: priorityId,
         });
-        console.log('[BoardContext] changeTaskPriority: History recorded');
       } catch (err) {
         console.error('[BoardContext] changeTaskPriority error:', err);
         setError(err instanceof Error ? err.message : 'Failed to change task priority');

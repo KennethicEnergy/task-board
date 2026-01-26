@@ -24,14 +24,7 @@ export const PriorityDropZone = ({ priority }: PriorityDropZoneProps) => {
         const hasTaskData = e.dataTransfer.types.includes('application/x-drag-type') ||
                            e.dataTransfer.types.includes('application/x-drag-id') ||
                            e.dataTransfer.types.includes('text/plain');
-        
-        console.log('[PriorityDropZone] onDragEnter:', {
-          priority: priority.label,
-          priorityId: priority.id,
-          hasTaskData,
-          types: Array.from(e.dataTransfer.types),
-        });
-        
+
         if (hasTaskData) {
           e.preventDefault();
           e.stopPropagation();
@@ -43,12 +36,12 @@ export const PriorityDropZone = ({ priority }: PriorityDropZoneProps) => {
         const hasTaskData = e.dataTransfer.types.includes('application/x-drag-type') ||
                            e.dataTransfer.types.includes('application/x-drag-id') ||
                            e.dataTransfer.types.includes('text/plain');
-        
+
         if (!hasTaskData) {
           e.dataTransfer.dropEffect = 'none';
           return;
         }
-        
+
         // Required to allow drop and to show the "move" cursor
         e.preventDefault();
         e.stopPropagation();
@@ -69,38 +62,17 @@ export const PriorityDropZone = ({ priority }: PriorityDropZoneProps) => {
         e.stopPropagation();
         setIsOver(false);
 
-        console.log('[PriorityDropZone] onDrop triggered:', {
-          priority: priority.label,
-          priorityId: priority.id,
-          types: Array.from(e.dataTransfer.types),
-        });
-
         // Read the drag type and task ID (only available in drop event)
         // HTML5 Drag API: getData can only be called in drop event, and only once per MIME type
         const dragType = e.dataTransfer.getData('application/x-drag-type');
         let taskId = e.dataTransfer.getData('application/x-drag-id');
-        
-        console.log('[PriorityDropZone] After reading custom MIME types:', {
-          dragType,
-          taskId,
-        });
-        
+
         // Fallback to text/plain if custom MIME type didn't work
         // Note: Some browsers may not preserve custom MIME types, so text/plain is our fallback
         if (!taskId) {
           taskId = e.dataTransfer.getData('text/plain');
-          console.log('[PriorityDropZone] After reading text/plain fallback:', {
-            taskId,
-          });
         }
-        
-        console.log('[PriorityDropZone] Final values before check:', {
-          taskId,
-          taskIdTrimmed: taskId?.trim(),
-          dragType,
-          isTask: dragType === 'task' || !dragType,
-        });
-        
+
         // Proceed if we have a valid task ID
         // Accept if dragType is 'task' OR if dragType is empty/undefined (browser didn't preserve it)
         // We trust that if something is dropped on a priority zone, it's a task
@@ -108,11 +80,6 @@ export const PriorityDropZone = ({ priority }: PriorityDropZoneProps) => {
           // Only proceed if it's a task (not a category)
           // If dragType is empty or null, we assume it's a task since it was dropped on priority zone
           const isTask = dragType === 'task' || !dragType;
-          console.log('[PriorityDropZone] Calling changeTaskPriority:', {
-            taskId: taskId.trim(),
-            priorityId: priority.id,
-            isTask,
-          });
           if (isTask) {
             changeTaskPriority(taskId.trim(), priority.id);
           } else {

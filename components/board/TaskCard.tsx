@@ -15,7 +15,7 @@ interface TaskCardProps {
 
 export const TaskCard = ({ task, priority, onEdit, onDragStart, onDragEnd, isDraggedOver }: TaskCardProps) => {
   const { user } = useAuth();
-  
+
   const getExpiryStatus = (): 'expired' | 'expiring' | 'normal' => {
     if (!task.expiryDate) return 'normal';
     if (isExpired(task.expiryDate)) return 'expired';
@@ -40,17 +40,11 @@ export const TaskCard = ({ task, priority, onEdit, onDragStart, onDragEnd, isDra
     <div
       draggable
       onDragStart={(e) => {
-        console.log('[TaskCard] onDragStart:', {
-          taskId: task.id,
-          taskTitle: task.title,
-          types: Array.from(e.dataTransfer.types),
-        });
         // Stop propagation to prevent parent category drag handler from interfering
         e.stopPropagation();
         onDragStart(e, task);
         // Prevent click event from firing after drag
         e.dataTransfer.effectAllowed = 'move';
-        console.log('[TaskCard] onDragStart: After calling onDragStart, types:', Array.from(e.dataTransfer.types));
       }}
       onDragEnd={onDragEnd}
       className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 sm:p-4 cursor-move hover:shadow-md dark:hover:shadow-lg transition-shadow touch-manipulation ${

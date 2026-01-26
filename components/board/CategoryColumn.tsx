@@ -39,15 +39,9 @@ export const CategoryColumn = ({
   };
 
   const handleTaskDragStart = (e: React.DragEvent, task: Task) => {
-    console.log('[CategoryColumn] handleTaskDragStart:', {
-      taskId: task.id,
-      taskTitle: task.title,
-      categoryId: category.id,
-    });
     // Stop propagation to prevent parent category drag handler from interfering
     e.stopPropagation();
     handleDragStart(e, 'task', task.id, task);
-    console.log('[CategoryColumn] handleTaskDragStart: After calling handleDragStart, types:', Array.from(e.dataTransfer.types));
   };
 
   const handleCategoryDragEnter = (e: React.DragEvent) => {
