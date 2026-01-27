@@ -21,17 +21,26 @@ describe('useDraftSaving', () => {
     jest.clearAllTimers();
   });
 
-  it('should save draft after delay', async () => {
-    renderHook(() => useDraftSaving(mockDraft, mockOnSave, true));
+  it('should save draft after delay when draft changes from baseline', async () => {
+    const { rerender } = renderHook(
+      ({ draft }) => useDraftSaving(draft, mockOnSave, true, 'task-1'),
+      { initialProps: { draft: mockDraft } }
+    );
 
+    // First draft is baseline, no save
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
     expect(mockOnSave).not.toHaveBeenCalled();
 
+    // Change draft (user edit) then wait for debounce
+    rerender({ draft: { ...mockDraft, title: 'Updated' } });
     act(() => {
       jest.advanceTimersByTime(1000);
     });
 
     await waitFor(() => {
-      expect(mockOnSave).toHaveBeenCalledWith(mockDraft);
+      expect(mockOnSave).toHaveBeenCalledWith({ ...mockDraft, title: 'Updated' });
     });
   });
 

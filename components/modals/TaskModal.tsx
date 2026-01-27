@@ -23,6 +23,7 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
   const [expiryDate, setExpiryDate] = useState('');
   const [draft, setDraft] = useState<TaskDraft | null>(null);
   const [saving, setSaving] = useState(false);
+  const [hasLoadedTask, setHasLoadedTask] = useState(false);
 
   useEffect(() => {
     if (task) {
@@ -41,11 +42,13 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
       // Always use task's category (can't change category via draft)
       setCategoryId(task.categoryId);
       setDraft(task.draft);
+      setHasLoadedTask(true);
     } else {
       // Reset form for new task
       setTitle('');
       setDescription('');
       setExpiryDate('');
+      setHasLoadedTask(false);
       if (categories.length > 0) {
         setCategoryId(categories[0].id);
       }
@@ -82,7 +85,13 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
     };
   }, [task, title, description, expiryDate, priorityId]);
 
-  useDraftSaving(currentDraft, handleSaveDraft, !!task);
+  // Only pass draft after form is loaded from task, so we don't save on initial open
+  useDraftSaving(
+    hasLoadedTask && task ? currentDraft : null,
+    handleSaveDraft,
+    !!task,
+    task?.id ?? null
+  );
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
