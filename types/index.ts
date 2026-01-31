@@ -42,7 +42,7 @@ export interface Task {
 export interface UpdateHistoryEntry {
   id: string;
   type: 'board' | 'card';
-  action: 'category_created' | 'category_moved' | 'task_created' | 'task_moved' | 'task_updated' | 'priority_changed' | 'expiry_changed';
+  action: 'category_created' | 'category_moved' | 'category_deleted' | 'task_created' | 'task_moved' | 'task_updated' | 'task_deleted' | 'priority_changed' | 'expiry_changed';
   entityId: string;
   entityType: 'category' | 'task';
   previousValue?: string | number;

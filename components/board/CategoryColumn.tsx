@@ -6,6 +6,7 @@ import { TaskCard } from './TaskCard';
 import { useDragAndDrop } from '@/hooks/useDragAndDrop';
 import { useBoard } from '@/context/BoardContext';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface CategoryColumnProps {
   category: Category;
@@ -34,9 +35,14 @@ export const CategoryColumn = ({
     .filter((t) => t.categoryId === category.id)
     .sort((a, b) => a.order - b.order);
 
-  const handleDelete = () => {
-    deleteCategory(category.id);
-    setShowDeleteConfirm(false);
+  const handleDelete = async () => {
+    try {
+      await deleteCategory(category.id);
+      setShowDeleteConfirm(false);
+      toast.success('Category deleted');
+    } catch {
+      toast.error('Failed to delete category');
+    }
   };
 
   const handleTaskDragStart = (e: React.DragEvent, task: Task) => {
@@ -140,8 +146,12 @@ export const CategoryColumn = ({
             ×
           </button>
           {showDeleteConfirm && (
-            <div className="absolute right-0 top-6 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded shadow-lg p-2 z-10">
-              <p className="text-xs text-gray-700 dark:text-gray-300 mb-2">Delete category?</p>
+            <div className="absolute right-0 top-6 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded shadow-lg p-2 z-10 min-w-[200px]">
+              <p className="text-xs text-gray-700 dark:text-gray-300 mb-2">
+                {categoryTasks.length > 0
+                  ? `Are you sure? This category has ${categoryTasks.length} task(s). Deleting it will remove them as well.`
+                  : 'Delete category?'}
+              </p>
               <div className="flex gap-2">
                 <button
                   onClick={handleDelete}

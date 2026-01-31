@@ -12,9 +12,11 @@ const getActionLabel = (action: UpdateHistoryEntry['action']): string => {
   const labels: Record<UpdateHistoryEntry['action'], string> = {
     category_created: 'Category Created',
     category_moved: 'Category Moved',
+    category_deleted: 'Category Deleted',
     task_created: 'Task Created',
     task_moved: 'Task Moved',
     task_updated: 'Task Updated',
+    task_deleted: 'Task Deleted',
     priority_changed: 'Priority Changed',
     expiry_changed: 'Expiry Date Changed',
   };
@@ -98,7 +100,30 @@ export const HistoryModal = ({ history, onClose }: HistoryModalProps) => {
                         </div>
                       );
                     })()}
-                    {entry.metadata && entry.action !== 'task_updated' && Object.keys(entry.metadata).length > 0 && (
+                    {entry.action === 'category_deleted' && entry.metadata && (() => {
+                      const metadata = entry.metadata;
+                      const title = metadata.title ? String(metadata.title) : null;
+                      const taskCount = typeof metadata.taskCount === 'number' ? metadata.taskCount : null;
+                      if (!title && taskCount === null) return null;
+                      return (
+                        <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          {title && <span>Category &ldquo;{title}&rdquo;</span>}
+                          {taskCount !== null && taskCount > 0 && (
+                            <span> ({taskCount} task{taskCount === 1 ? '' : 's'} removed)</span>
+                          )}
+                        </div>
+                      );
+                    })()}
+                    {entry.action === 'task_deleted' && entry.metadata && (() => {
+                      const title = entry.metadata.title ? String(entry.metadata.title) : null;
+                      if (!title) return null;
+                      return (
+                        <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                          Task &ldquo;{title}&rdquo;
+                        </div>
+                      );
+                    })()}
+                    {entry.metadata && entry.action !== 'task_updated' && entry.action !== 'category_deleted' && entry.action !== 'task_deleted' && Object.keys(entry.metadata).length > 0 && (
                       <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         {JSON.stringify(entry.metadata)}
                       </div>

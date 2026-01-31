@@ -16,7 +16,7 @@ interface TaskModalProps {
 }
 
 export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalProps) => {
-  const { createTask, updateTask } = useBoard();
+  const { createTask, updateTask, deleteTask } = useBoard();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [categoryId, setCategoryId] = useState('');
@@ -25,6 +25,8 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
   const [draft, setDraft] = useState<TaskDraft | null>(null);
   const [saving, setSaving] = useState(false);
   const [hasLoadedTask, setHasLoadedTask] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (task) {
@@ -96,16 +98,16 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     if (!title.trim()) {
       toast.error('Title is required');
       return;
     }
-
     if (!categoryId) {
       toast.error('Please select a category');
       return;
     }
-
+    setIsSubmitting(true);
     try {
       if (task) {
         await updateTask(task.id, {
@@ -132,6 +134,24 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
       onClose();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to save task');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteTask = async () => {
+    if (!task) return;
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      await deleteTask(task.id);
+      toast.success('Task deleted');
+      setShowDeleteConfirm(false);
+      onClose();
+    } catch {
+      toast.error('Failed to delete task');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -239,6 +259,16 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
           )}
 
           <div className="flex flex-col sm:flex-row justify-end gap-2 pt-4">
+            {task && (
+              <button
+                type="button"
+                onClick={() => setShowDeleteConfirm(true)}
+                disabled={isSubmitting}
+                className="px-4 py-2 border border-red-300 dark:border-red-600 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors cursor-pointer w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Delete Task
+              </button>
+            )}
             <button
               type="button"
               onClick={onClose}
@@ -248,11 +278,40 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors cursor-pointer w-full sm:w-auto"
+              disabled={isSubmitting}
+              className="px-4 py-2 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors cursor-pointer w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {task ? 'Update' : 'Create'}
             </button>
           </div>
+
+          {showDeleteConfirm && (
+            <div className="fixed inset-0 bg-black/40 dark:bg-black/60 flex items-center justify-center z-[60] p-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 w-full max-w-sm">
+                <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
+                  Delete this task? This cannot be undone.
+                </p>
+                <div className="flex gap-2 justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setShowDeleteConfirm(false)}
+                    disabled={isSubmitting}
+                    className="px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDeleteTask}
+                    disabled={isSubmitting}
+                    className="px-3 py-2 text-sm bg-red-600 dark:bg-red-500 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-600 cursor-pointer disabled:opacity-50"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </form>
       </div>
     </div>

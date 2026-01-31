@@ -146,14 +146,30 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 
   const deleteCategory = useCallback(
-    async (id: string) => {
+    async (id: string): Promise<void> => {
+      if (!user) return;
       try {
+        const category = categories.find((c) => c.id === id);
+        if (!category) return;
+
+        const tasksInCategory = tasks.filter((t) => t.categoryId === id);
+        for (const task of tasksInCategory) {
+          await deleteTaskService(task.id);
+        }
         await deleteCategoryService(id);
+        await recordHistory({
+          type: 'board',
+          action: 'category_deleted',
+          entityId: id,
+          entityType: 'category',
+          metadata: { title: category.title, taskCount: tasksInCategory.length },
+        });
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to delete category');
+        throw err;
       }
     },
-    []
+    [user, categories, tasks, recordHistory]
   );
 
   const reorderCategories = useCallback(
@@ -263,13 +279,25 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const deleteTask = useCallback(
     async (id: string) => {
+      if (!user) return;
       try {
+        const task = tasks.find((t) => t.id === id);
+        if (!task) return;
+
         await deleteTaskService(id);
+        await recordHistory({
+          type: 'card',
+          action: 'task_deleted',
+          entityId: id,
+          entityType: 'task',
+          metadata: { title: task.title },
+        });
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to delete task');
+        throw err;
       }
     },
-    []
+    [user, tasks, recordHistory]
   );
 
   const moveTask = useCallback(
