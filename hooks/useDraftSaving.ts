@@ -1,7 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { TaskDraft } from '@/types';
-
-const DRAFT_SAVE_DELAY = 1000;
+import { DRAFT_SAVE_DELAY_MS } from '@/constants';
 
 export const useDraftSaving = (
   draft: TaskDraft | null,
@@ -44,7 +43,7 @@ export const useDraftSaving = (
       timeoutRef.current = setTimeout(() => {
         onSave(newDraft);
         lastSavedRef.current = draftKey;
-      }, DRAFT_SAVE_DELAY);
+      }, DRAFT_SAVE_DELAY_MS);
     },
     [onSave]
   );

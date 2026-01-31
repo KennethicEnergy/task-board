@@ -1,6 +1,7 @@
 'use client';
 
 import { Category, Task, Priority } from '@/types';
+import { DEFAULT_CATEGORY_COLOR } from '@/constants';
 import { TaskCard } from './TaskCard';
 import { useDragAndDrop } from '@/hooks/useDragAndDrop';
 import { useBoard } from '@/context/BoardContext';
@@ -126,7 +127,7 @@ export const CategoryColumn = ({
         <div className="flex items-center gap-2 min-w-0 flex-1">
           <div
             className="w-3 h-3 sm:w-4 sm:h-4 rounded flex-shrink-0"
-            style={{ backgroundColor: category.color || '#6366f1' }}
+            style={{ backgroundColor: category.color || DEFAULT_CATEGORY_COLOR }}
           />
           <h2 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base truncate">{category.title}</h2>
           <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">({categoryTasks.length})</span>

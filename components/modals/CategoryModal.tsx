@@ -2,21 +2,16 @@
 
 import { useState, FormEvent } from 'react';
 import toast from 'react-hot-toast';
+import { CATEGORY_COLOR_PALETTE } from '@/constants';
 
 interface CategoryModalProps {
   onClose: () => void;
   onCreate: (title: string, color?: string) => Promise<void>;
 }
 
-const COLORS = [
-  '#6366f1', '#8b5cf6', '#ec4899', '#f43f5e',
-  '#ef4444', '#f97316', '#f59e0b', '#eab308',
-  '#84cc16', '#22c55e', '#10b981', '#14b8a6',
-];
-
 export const CategoryModal = ({ onClose, onCreate }: CategoryModalProps) => {
   const [title, setTitle] = useState('');
-  const [selectedColor, setSelectedColor] = useState(COLORS[0]);
+  const [selectedColor, setSelectedColor] = useState(CATEGORY_COLOR_PALETTE[0]);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -72,7 +67,7 @@ export const CategoryModal = ({ onClose, onCreate }: CategoryModalProps) => {
               Color
             </label>
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-              {COLORS.map((color) => (
+              {CATEGORY_COLOR_PALETTE.map((color) => (
                 <button
                   key={color}
                   type="button"

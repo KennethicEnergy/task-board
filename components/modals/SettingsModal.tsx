@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { NOTIFICATION_METHODS, DEFAULT_NOTIFICATION_METHODS } from '@/types';
 import toast from 'react-hot-toast';
 
 interface SettingsModalProps {
@@ -10,19 +11,19 @@ interface SettingsModalProps {
 
 export const SettingsModal = ({ onClose }: SettingsModalProps) => {
   const { user, updateNotificationSettings } = useAuth();
-  
+
   // Initialize state from user settings - derive directly from user prop
   const initialSettings = user?.notificationSettings || {
     daysBefore: 1,
     hoursBefore: 0,
     enabled: true,
-    methods: ['visual', 'toast'] as ('visual' | 'toast' | 'email' | 'push')[],
+    methods: DEFAULT_NOTIFICATION_METHODS,
   };
 
   const [daysBefore, setDaysBefore] = useState(initialSettings.daysBefore);
   const [hoursBefore, setHoursBefore] = useState(initialSettings.hoursBefore);
   const [enabled, setEnabled] = useState(initialSettings.enabled);
-  const [methods, setMethods] = useState<('visual' | 'toast' | 'email' | 'push')[]>(initialSettings.methods);
+  const [methods, setMethods] = useState(initialSettings.methods);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -40,10 +41,22 @@ export const SettingsModal = ({ onClose }: SettingsModalProps) => {
     }
   };
 
-  const toggleMethod = (method: 'visual' | 'toast' | 'email' | 'push') => {
+  const toggleMethod = (method: (typeof NOTIFICATION_METHODS)[number]) => {
     setMethods((prev) =>
       prev.includes(method) ? prev.filter((m) => m !== method) : [...prev, method]
     );
+  };
+
+  const handleDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/\D/g, '');
+    const num = raw === '' ? 0 : parseInt(raw, 10);
+    setDaysBefore(isNaN(num) ? 0 : Math.max(0, num));
+  };
+
+  const handleHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/\D/g, '');
+    const num = raw === '' ? 0 : parseInt(raw, 10);
+    setHoursBefore(isNaN(num) ? 0 : Math.min(23, Math.max(0, num)));
   };
 
   return (
@@ -77,10 +90,11 @@ export const SettingsModal = ({ onClose }: SettingsModalProps) => {
                   Days Before Expiry
                 </label>
                 <input
-                  type="number"
-                  min="0"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={daysBefore}
-                  onChange={(e) => setDaysBefore(parseInt(e.target.value) || 0)}
+                  onChange={handleDaysChange}
                   className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
               </div>
@@ -90,11 +104,11 @@ export const SettingsModal = ({ onClose }: SettingsModalProps) => {
                   Hours Before Expiry
                 </label>
                 <input
-                  type="number"
-                  min="0"
-                  max="23"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={hoursBefore}
-                  onChange={(e) => setHoursBefore(parseInt(e.target.value) || 0)}
+                  onChange={handleHoursChange}
                   className="w-full px-4 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
               </div>
@@ -104,7 +118,7 @@ export const SettingsModal = ({ onClose }: SettingsModalProps) => {
                   Notification Methods
                 </label>
                 <div className="space-y-2">
-                  {(['visual', 'toast', 'email', 'push'] as const).map((method) => (
+                  {NOTIFICATION_METHODS.map((method) => (
                     <label key={method} className="flex items-center">
                       <input
                         type="checkbox"

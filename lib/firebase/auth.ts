@@ -7,7 +7,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { auth } from './config';
-import { User } from '@/types';
+import { User, DEFAULT_NOTIFICATION_METHODS } from '@/types';
 import { getUserDocument, createUserDocument, updateUserDocument } from './users';
 
 export const registerUser = async (
@@ -30,7 +30,7 @@ export const registerUser = async (
       enabled: true,
       daysBefore: 1,
       hoursBefore: 0,
-      methods: ['visual', 'toast'],
+      methods: DEFAULT_NOTIFICATION_METHODS,
     },
   };
 
@@ -52,7 +52,7 @@ export const loginUser = async (email: string, password: string): Promise<User> 
         enabled: true,
         daysBefore: 1,
         hoursBefore: 0,
-        methods: ['visual', 'toast'],
+        methods: DEFAULT_NOTIFICATION_METHODS,
       },
     };
     await createUserDocument(userData);

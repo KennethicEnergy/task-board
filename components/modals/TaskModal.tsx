@@ -4,6 +4,7 @@ import { useState, useEffect, FormEvent, useMemo } from 'react';
 import { Task, Category, Priority, TaskDraft } from '@/types';
 import { useBoard } from '@/context/BoardContext';
 import { useDraftSaving } from '@/hooks/useDraftSaving';
+import { TOAST_DURATION_SHORT } from '@/constants';
 import { formatDate } from '@/utils/dateUtils';
 import toast from 'react-hot-toast';
 
@@ -64,7 +65,7 @@ export const TaskModal = ({ task, categories, priorities, onClose }: TaskModalPr
     setSaving(true);
     try {
       await updateTask(task.id, { draft: draftData });
-      toast.success('Draft saved', { duration: 2000, icon: '💾' });
+      toast.success('Draft saved', { duration: TOAST_DURATION_SHORT, icon: '💾' });
     } catch (error) {
       console.error('Failed to save draft:', error);
       toast.error('Failed to save draft');

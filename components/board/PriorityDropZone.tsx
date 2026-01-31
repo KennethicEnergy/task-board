@@ -2,7 +2,9 @@
 
 import { Priority } from '@/types';
 import { useBoard } from '@/context/BoardContext';
+import { TOAST_DURATION_SHORT } from '@/constants';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface PriorityDropZoneProps {
   priority: Priority;
@@ -81,7 +83,14 @@ export const PriorityDropZone = ({ priority }: PriorityDropZoneProps) => {
           // If dragType is empty or null, we assume it's a task since it was dropped on priority zone
           const isTask = dragType === 'task' || !dragType;
           if (isTask) {
-            changeTaskPriority(taskId.trim(), priority.id);
+            try {
+              const updated = await changeTaskPriority(taskId.trim(), priority.id);
+              if (updated) {
+                toast.success(`Priority updated to ${priority.label}`, { duration: TOAST_DURATION_SHORT });
+              }
+            } catch {
+              toast.error('Failed to update priority');
+            }
           }
         }
       }}

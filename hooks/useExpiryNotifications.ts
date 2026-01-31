@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { differenceInHours, differenceInDays, isAfter, isBefore } from 'date-fns';
 import { Task, User } from '@/types';
+import { TOAST_DURATION_LONG, EXPIRY_CHECK_INTERVAL_MS, HOURS_PER_DAY } from '@/constants';
 import toast from 'react-hot-toast';
 import { sendExpiryEmail } from '@/lib/notifications/email';
 import { sendPushNotification } from '@/lib/notifications/push';
@@ -18,7 +19,7 @@ export const useExpiryNotifications = (
 
     const { daysBefore, hoursBefore, methods } = user.notificationSettings;
     const now = new Date();
-    const thresholdHours = daysBefore * 24 + hoursBefore;
+    const thresholdHours = daysBefore * HOURS_PER_DAY + hoursBefore;
     const expiringTasks: string[] = [];
 
     tasks.forEach((task) => {
@@ -42,7 +43,7 @@ export const useExpiryNotifications = (
               ? `"${task.title}" expires in ${daysUntilExpiry} day(s)`
               : `"${task.title}" expires in ${hoursUntilExpiry} hour(s)`;
           toast.error(message, {
-            duration: 5000,
+            duration: TOAST_DURATION_LONG,
             icon: '⏰',
           });
           notifiedTasksRef.current.add(notificationKey);
@@ -94,7 +95,7 @@ export const useExpiryNotifications = (
 
   useEffect(() => {
     checkExpiryNotifications();
-    const interval = setInterval(checkExpiryNotifications, 60000);
+    const interval = setInterval(checkExpiryNotifications, EXPIRY_CHECK_INTERVAL_MS);
     return () => clearInterval(interval);
   }, [checkExpiryNotifications]);
 
@@ -108,7 +109,7 @@ export const useExpiryNotifications = (
       if (!user || !user.notificationSettings.enabled) return 'normal';
 
       const { daysBefore, hoursBefore } = user.notificationSettings;
-      const thresholdHours = daysBefore * 24 + hoursBefore;
+      const thresholdHours = daysBefore * HOURS_PER_DAY + hoursBefore;
       const hoursUntilExpiry = differenceInHours(task.expiryDate, now);
 
       if (hoursUntilExpiry <= thresholdHours && hoursUntilExpiry > 0) {

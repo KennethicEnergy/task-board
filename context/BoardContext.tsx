@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { Category, Task, Priority, UpdateHistoryEntry, BoardState } from '@/types';
+import { DEFAULT_PRIORITIES, DEFAULT_CATEGORY_COLOR } from '@/constants';
 import {
   subscribeToCategories,
   subscribeToTasks,
@@ -31,7 +32,7 @@ interface BoardContextType extends BoardState {
   updateTask: (id: string, updates: Partial<Task>) => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
   moveTask: (taskId: string, categoryId: string, newOrder: number) => Promise<void>;
-  changeTaskPriority: (taskId: string, priorityId: string) => Promise<void>;
+  changeTaskPriority: (taskId: string, priorityId: string) => Promise<boolean>;
   createPriority: (priority: Omit<Priority, 'id'>) => Promise<void>;
   updatePriority: (id: string, updates: Partial<Priority>) => Promise<void>;
   deletePriority: (id: string) => Promise<void>;
@@ -40,18 +41,11 @@ interface BoardContextType extends BoardState {
 
 const BoardContext = createContext<BoardContextType | undefined>(undefined);
 
-const defaultPriorities: Priority[] = [
-  { id: 'low', label: 'Low', color: '#94a3b8', level: 'low', order: 0 },
-  { id: 'medium', label: 'Medium', color: '#fbbf24', level: 'medium', order: 1 },
-  { id: 'high', label: 'High', color: '#f97316', level: 'high', order: 2 },
-  { id: 'urgent', label: 'Urgent', color: '#ef4444', level: 'urgent', order: 3 },
-];
-
 export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [priorities, setPriorities] = useState<Priority[]>(defaultPriorities);
+  const [priorities, setPriorities] = useState<Priority[]>(DEFAULT_PRIORITIES);
   const [updateHistory, setUpdateHistory] = useState<UpdateHistoryEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +56,7 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setCategories([]);
       setTasks([]);
-      setPriorities(defaultPriorities);
+      setPriorities(DEFAULT_PRIORITIES);
       setUpdateHistory([]);
       setIsLoading(false);
       return;
@@ -123,7 +117,7 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const categoryId = await createCategoryService({
           title,
           order: maxOrder + 1,
-          color: color || '#6366f1',
+          color: color || DEFAULT_CATEGORY_COLOR,
           userId: user.id,
         });
         await recordHistory({
@@ -339,16 +333,16 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 
   const changeTaskPriority = useCallback(
-    async (taskId: string, priorityId: string) => {
-      if (!user) return;
+    async (taskId: string, priorityId: string): Promise<boolean> => {
+      if (!user) return false;
 
       try {
         const task = tasks.find((t) => t.id === taskId);
-        if (!task) return;
+        if (!task) return false;
 
         // Don't update if priority is already the same
         if (task.priorityId === priorityId) {
-          return;
+          return false;
         }
 
         await updateTaskService(taskId, { priorityId });
@@ -361,8 +355,10 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           previousValue: task.priorityId,
           newValue: priorityId,
         });
+        return true;
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to change task priority');
+        throw err;
       }
     },
     [user, tasks, recordHistory]

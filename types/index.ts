@@ -52,11 +52,16 @@ export interface UpdateHistoryEntry {
   userId: string;
 }
 
+export const NOTIFICATION_METHODS = ['visual', 'toast', 'email', 'push'] as const;
+export type NotificationMethod = (typeof NOTIFICATION_METHODS)[number];
+
+export const DEFAULT_NOTIFICATION_METHODS: NotificationMethod[] = ['visual', 'toast'];
+
 export interface NotificationSettings {
   enabled: boolean;
   daysBefore: number;
   hoursBefore: number;
-  methods: ('visual' | 'toast' | 'email' | 'push')[];
+  methods: NotificationMethod[];
 }
 
 export interface User {
