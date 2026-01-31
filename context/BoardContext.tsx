@@ -155,6 +155,13 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const tasksInCategory = tasks.filter((t) => t.categoryId === id);
         for (const task of tasksInCategory) {
           await deleteTaskService(task.id);
+          await recordHistory({
+            type: 'card',
+            action: 'task_deleted',
+            entityId: task.id,
+            entityType: 'task',
+            metadata: { title: task.title },
+          });
         }
         await deleteCategoryService(id);
         await recordHistory({
